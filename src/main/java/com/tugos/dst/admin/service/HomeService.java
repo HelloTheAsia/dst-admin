@@ -176,6 +176,31 @@ public class HomeService {
     }
 
     /**
+     * 更新模组 需要停止地面和洞穴进程
+     */
+    public ResultVO<String> updateMods() {
+        if (!this.checkIsInstallDst()) {
+            //未安装dst
+            return ResultVO.fail(I18nResourcesConfig.getMessage("tip.home.start.error"));
+        }
+        boolean flag = shellService.updateMods();
+        if (flag) {
+            return ResultVO.success();
+        } else {
+            return ResultVO.fail("更新mod失败");
+        }
+    }
+
+    public static List<String> getModConfig() {
+        String myGameModPath = DstConstant.ROOT_PATH + DstConstant.SINGLE_SLASH + DstConstant.DST_USER_GAME_MASTER_MOD_PATH;
+        File file = new File(myGameModPath);
+        if (!file.exists()) {
+            return null;
+        }
+        return ModFileUtil.readModConfigFile(myGameModPath);
+    }
+
+    /**
      * 备份游戏存档
      *
      * @param name 存档名称
@@ -313,4 +338,5 @@ public class HomeService {
     public void setSettingService(SettingService settingService) {
         this.settingService = settingService;
     }
+
 }

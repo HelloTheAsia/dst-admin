@@ -88,6 +88,14 @@ public class HomeController {
         return homeService.updateGame();
     }
 
+    @GetMapping("/updateMods")
+    @RequiresAuthentication
+    @ResponseBody
+    public ResultVO<String> updateMods() {
+        log.info("更新模组");
+        return homeService.updateMods();
+    }
+
 
     @GetMapping("/backup")
     @RequiresAuthentication

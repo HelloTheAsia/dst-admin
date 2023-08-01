@@ -60,16 +60,16 @@ public class ModFileUtil {
 
 
     /**
-     * 写入mod
+     * 写入mod/更新mod
      *
      * @param list 编号
      * @param path 地址
      */
-    public static boolean writeModConfigFile(List<String> list, String path) {
+    public static boolean writeModConfigFile(List<String> list, String path, String method) {
         File file = new File(path);
         try (FileOutputStream fos = new FileOutputStream(file)) {
             for (String str : list) {
-                fos.write(("ServerModSetup(\"" + str + "\")" + "\n").getBytes());
+                fos.write((method + "(\"" + str + "\")" + "\n").getBytes());
             }
             return true;
         } catch (IOException e) {

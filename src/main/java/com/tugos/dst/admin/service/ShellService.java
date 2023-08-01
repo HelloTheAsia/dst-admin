@@ -1,5 +1,7 @@
 package com.tugos.dst.admin.service;
 
+import static com.tugos.dst.admin.service.HomeService.getModConfig;
+
 import com.tugos.dst.admin.common.ResultCodeEnum;
 import com.tugos.dst.admin.common.ResultVO;
 import com.tugos.dst.admin.enums.DstLogTypeEnum;
@@ -32,6 +34,8 @@ public class ShellService {
      * 最大睡眠时间 10秒
      */
     public static final int MAX_SLEEP_SECOND = 10;
+    public static final String SERVER_MOD_SETUP = "ServerModSetup";
+    public static final String SERVER_MOD_UPDARE_METHOD = "ServerModCollectionSetup";
 
     private SystemService systemService;
 
@@ -129,7 +133,7 @@ public class ShellService {
      * @return 执行信息
      */
     public List<String> startMaster() {
-        //开始游戏是安装mod
+        //开始游戏时安装mod
         ResultVO<String> stringResultVO = this.installModToServer();
         log.info("安装mod：{}",stringResultVO);
         return ShellUtil.runShell(DstConstant.START_MASTER_CMD);
@@ -273,14 +277,12 @@ public class ShellService {
      */
     public ResultVO<String> installModToServer() {
         log.info("安装mod到服务器.....");
-        String myGameModPath = DstConstant.ROOT_PATH + DstConstant.SINGLE_SLASH + DstConstant.DST_USER_GAME_MASTER_MOD_PATH;
-        File file = new File(myGameModPath);
-        if (!file.exists()) {
-            return ResultVO.fail("mod文件不存在");
+        List<String> modConfig = getModConfig();
+        if (CollectionUtils.isEmpty(modConfig)) {
+            return ResultVO.fail("未找到mod配置文件");
         }
-        List<String> modConfig = ModFileUtil.readModConfigFile(myGameModPath);
         String serverModPath = DstConstant.ROOT_PATH + DstConstant.SINGLE_SLASH + DstConstant.DST_MOD_SETTING_PATH;
-        boolean flag = ModFileUtil.writeModConfigFile(modConfig, serverModPath);
+        boolean flag = ModFileUtil.writeModConfigFile(modConfig, serverModPath, SERVER_MOD_SETUP);
         if (flag) {
             return ResultVO.success();
         } else {
@@ -429,5 +431,19 @@ public class ShellService {
     @Autowired
     public void setSystemService(SystemService systemService) {
         this.systemService = systemService;
+    }
+
+    public boolean updateMods() {
+        log.info("停止服务器,准备更新服务器mod.....");
+        this.elegantShutdownMaster();
+        this.elegantShutdownCaves();
+        log.info("更新服务器mod.....");
+        List<String> modConfig = getModConfig();
+        if (CollectionUtils.isEmpty(modConfig)) {
+            log.info("未找到mod配置文件");
+            return false;
+        }
+        String serverModPath = DstConstant.ROOT_PATH + DstConstant.SINGLE_SLASH + DstConstant.DST_MOD_SETTING_PATH;
+        return ModFileUtil.writeModConfigFile(modConfig, serverModPath, SERVER_MOD_UPDARE_METHOD);
     }
 }
