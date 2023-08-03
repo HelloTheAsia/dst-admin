@@ -44,6 +44,12 @@ public final class DstConstant {
      */
     public static final String SCREEN_WORK_CAVES_NAME = "DST_CAVES";
 
+
+    /**
+     * 更新mods的screen任务的名称 DST_UPDATE_MODS
+     */
+    public static final String SCREEN_WORK_MODS_NAME = "DST_UPDATE_MODS";
+
     /**
      * 启动地面进程命令 设置名称为 DST_MASTER
      */
@@ -53,6 +59,11 @@ public final class DstConstant {
      * 启动洞穴进程命令 设置名称为 DST_CAVES
      */
     public static final String START_CAVES_CMD = "cd ~/dst/bin/ ; screen -d -m -S \""+SCREEN_WORK_CAVES_NAME+"\"  ./dontstarve_dedicated_server_nullrenderer -console -cluster MyDediServer -shard "+DST_CAVES+" ;";
+
+    /**
+     * 更新模组进程命令 设置名称为 DST_UPDATE_MODS
+     */
+    public static final String UPDATE_MOD_CMD = "cd ~/dst/bin/ ; screen -d -m -S \""+SCREEN_WORK_MODS_NAME+"\"  ./dontstarve_dedicated_server_nullrenderer -console -only_update_server_mods;";
 
     /**
      * 检查目前所有的screen作业，并删除已经无法使用的screen作业

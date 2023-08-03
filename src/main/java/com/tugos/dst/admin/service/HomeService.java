@@ -183,8 +183,10 @@ public class HomeService {
             //未安装dst
             return ResultVO.fail(I18nResourcesConfig.getMessage("tip.home.start.error"));
         }
-        boolean flag = shellService.updateMods();
-        if (flag) {
+        List<String> strings = shellService.updateMods();
+        log.info("更新mod结果：{}", strings);
+        if (CollectionUtils.isNotEmpty(strings)) {
+            log.info("更新mod成功");
             return ResultVO.success();
         } else {
             return ResultVO.fail("更新mod失败");

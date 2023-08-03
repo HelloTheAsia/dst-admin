@@ -282,6 +282,7 @@ public class ShellService {
             return ResultVO.fail("未找到mod配置文件");
         }
         String serverModPath = DstConstant.ROOT_PATH + DstConstant.SINGLE_SLASH + DstConstant.DST_MOD_SETTING_PATH;
+        log.info("mod配置文件路径：{}", serverModPath);
         boolean flag = ModFileUtil.writeModConfigFile(modConfig, serverModPath, SERVER_MOD_SETUP);
         if (flag) {
             return ResultVO.success();
@@ -433,7 +434,7 @@ public class ShellService {
         this.systemService = systemService;
     }
 
-    public boolean updateMods() {
+    public List<String> updateMods() {
         log.info("停止服务器,准备更新服务器mod.....");
         this.elegantShutdownMaster();
         this.elegantShutdownCaves();
@@ -441,9 +442,10 @@ public class ShellService {
         List<String> modConfig = getModConfig();
         if (CollectionUtils.isEmpty(modConfig)) {
             log.info("未找到mod配置文件");
-            return false;
+            return null;
         }
         String serverModPath = DstConstant.ROOT_PATH + DstConstant.SINGLE_SLASH + DstConstant.DST_MOD_SETTING_PATH;
-        return ModFileUtil.writeModConfigFile(modConfig, serverModPath, SERVER_MOD_UPDARE_METHOD);
+        ModFileUtil.writeModConfigFile(modConfig, serverModPath, SERVER_MOD_UPDARE_METHOD);
+        return ShellUtil.runShell(DstConstant.UPDATE_MOD_CMD);
     }
 }
