@@ -127,7 +127,6 @@ public class BackupService {
             revertZIPBackup(name);
         } else {
             //tar
-            delMyDediServer();
             shellService.revertBackup(name);
         }
         return ResultVO.success();

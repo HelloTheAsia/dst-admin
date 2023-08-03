@@ -430,7 +430,7 @@
             },
             //更新mods
             updateMods() {
-                this.visible2 = false;//隐藏
+                this.visible8 = false;//隐藏
                 this.loading = true;
                 get("/home/updateMods").then((data) => {
                     this.loading = false;
