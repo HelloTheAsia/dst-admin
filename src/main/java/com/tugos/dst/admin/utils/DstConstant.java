@@ -63,7 +63,7 @@ public final class DstConstant {
     /**
      * 更新模组进程命令 设置名称为 DST_UPDATE_MODS
      */
-    public static final String UPDATE_MOD_CMD = "cd ~/dst/bin/ ; screen -d -m -S \""+SCREEN_WORK_MODS_NAME+"\"  ./dontstarve_dedicated_server_nullrenderer -console -only_update_server_mods;";
+    public static final String UPDATE_MOD_CMD = "cd ~/dst/bin/ ; ./dontstarve_dedicated_server_nullrenderer -console -only_update_server_mods;";
 
     /**
      * 检查目前所有的screen作业，并删除已经无法使用的screen作业

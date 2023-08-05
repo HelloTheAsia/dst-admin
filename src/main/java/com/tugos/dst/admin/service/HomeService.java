@@ -10,12 +10,14 @@ import com.tugos.dst.admin.enums.StartTypeEnum;
 import com.tugos.dst.admin.enums.StopTypeEnum;
 import com.tugos.dst.admin.utils.DstConstant;
 import com.tugos.dst.admin.utils.ModFileUtil;
+import com.tugos.dst.admin.utils.PublicIpUtils;
 import com.tugos.dst.admin.vo.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -33,6 +35,8 @@ import java.util.Objects;
 @Service
 @Slf4j
 public class HomeService {
+    @Value("${dst.master.port:10888}")
+    private String masterPort;
 
     private ShellService shellService;
     private BackupService backupService;
@@ -323,6 +327,13 @@ public class HomeService {
             gameArchiveVO.setPlayDay(I18nResourcesConfig.getMessage("tip.game.Archive.unknown.season"));
             gameArchiveVO.setSeason(I18nResourcesConfig.getMessage("tip.game.Archive.unknown.playDay"));
         }
+        String publicIP = PublicIpUtils.getPublicIP();
+        String clusterPassword = gameArchiveVO.getClusterPassword();
+        String connectCommand = "c_connect(\"" + publicIP + "\", " + masterPort + ");";
+        if (StringUtils.isNotBlank(clusterPassword)) {
+            connectCommand = "c_connect(\"" + publicIP + "\", " + masterPort + ", \"" + clusterPassword + "\");";
+        }
+        gameArchiveVO.setPublicIpConnect(connectCommand);
         return gameArchiveVO;
     }
 

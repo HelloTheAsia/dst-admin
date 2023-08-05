@@ -140,6 +140,14 @@
                             <h5><@spring.message code="home.pane1.card3.archive.day"/>：{{gameArchive.playDay}} </h5>
                             <h5><@spring.message code="home.pane1.card3.archive.season"/>：{{gameArchive.season}} </h5>
                             <h5><@spring.message code="home.pane1.card3.mod.num"/>：{{gameArchive.totalModNum}} </h5>
+                            <div style="display: inline-block;">
+                                <h5><@spring.message code="home.pane1.card3.public.connect"/>：{{gameArchive.publicIpConnect}}</h5>
+                            </div>
+                            <div style="display: inline-block;">
+                                <el-button :size="size" type="primary" style="margin: 10px" @click="copy(0)"><@spring.message code="setting.copy"/></el-button>
+                            </div>
+<#--                            <h5><@spring.message code="home.pane1.card3.public.connect"/>：{{gameArchive.publicIpConnect}} </h5>-->
+<#--                            <el-button :size="size" style="margin: 10px" @click="copy(0)"><@spring.message code="setting.copy"/></el-button>-->
                         </el-card>
                     </el-col>
                 </el-row>
@@ -405,6 +413,17 @@
                         this.getSystemInfo();
                     })
                 }
+            },copy(val) {
+                let tmpInput = document.createElement('textarea');
+                if (val === 0) {
+                    tmpInput.value = this.gameArchive.publicIpConnect;
+                }
+                document.body.appendChild(tmpInput);
+                tmpInput.select();
+                document.execCommand("Copy");
+                tmpInput.className = 'tmpInput';
+                tmpInput.style.display = 'none';
+                this.successMessage('复制成功');
             },
             //清理
             clearGame() {

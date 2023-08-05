@@ -58,5 +58,10 @@ public class GameArchiveVO {
      */
     private String modContent;
 
+    /**
+     * 公网连接地址
+     */
+    private String publicIpConnect;
+
 
 }
